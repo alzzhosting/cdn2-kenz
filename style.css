@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+body {
+    font-family: 'Orbitron', sans-serif;
+    text-align: center;
+    background: #0d0d0d;
+    color: #fff;
+    overflow: hidden;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+h1.glitch {
+    font-size: 2.5em;
+    position: relative;
+    color: cyan;
+    text-shadow: 0 0 5px cyan, 0 0 10px cyan;
+    animation: glitch 1s infinite;
+}
+
+@keyframes glitch {
+    0% { text-shadow: -2px 0 cyan, 2px 0 magenta; }
+    50% { text-shadow: 2px 0 cyan, -2px 0 magenta; }
+    100% { text-shadow: -2px 0 cyan, 2px 0 magenta; }
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: #0ff;
+    text-shadow: 0 0 10px cyan;
+}
+
+input[type="file"] {
+    background: #222;
+    color: white;
+    padding: 10px;
+    border: 1px solid cyan;
+    margin-top: 10px;
+}
+
+.neon-btn {
+    background: transparent;
+    border: 2px solid cyan;
+    color: cyan;
+    padding: 10px 20px;
+    font-size: 1em;
+    margin-top: 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.neon-btn:hover {
+    background: cyan;
+    color: black;
+    box-shadow: 0 0 10px cyan, 0 0 20px cyan;
+}
