@@ -3,17 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CDN Uploader</title>
-    <link rel="stylesheet" href="style.css">
+    <title>CDN Upload - Firebase</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/854/854894.png">
+    <meta name="description" content="Upload file ke Firebase dan dapatkan link langsung sebagai CDN.">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0d1117;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #161b22;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        input {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 5px;
+            background: #222;
+            color: white;
+            border: 1px solid #58a6ff;
+        }
+        button {
+            background: #238636;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #2ea043;
+        }
+        .link {
+            margin-top: 10px;
+            padding: 10px;
+            background: #222;
+            border-radius: 5px;
+            word-wrap: break-word;
+            border: 1px solid #58a6ff;
+        }
+    </style>
 </head>
 <body>
+
     <div class="container">
-        <h1 class="glitch">CDN UPLOADER</h1>
-        <p class="subtitle">Upload file & gambar, dapatkan link langsung!</p>
+        <h1>Upload File ke Firebase</h1>
         <input type="file" id="fileInput">
-        <button onclick="uploadFile()" class="neon-btn">UPLOAD</button>
-        <p id="fileLink"></p>
+        <button onclick="uploadFile()">Upload</button>
+        <p id="status"></p>
+        <div id="fileLink" class="link"></div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAcql3n_Z47TwrxNgV_CR_JLrPzslQNDPY",
+  authDomain: "cdn-kenz.firebaseapp.com",
+  databaseURL: "https://cdn-kenz-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "cdn-kenz",
+  storageBucket: "cdn-kenz.firebasestorage.app",
+  messagingSenderId: "146225116066",
+  appId: "1:146225116066:web:4af8c728894d8c9cd578fb",
+  measurementId: "G-HFJDPQDFRX"
+};
+
+        // Inisialisasi Firebase
+        firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+
+        function uploadFile() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) {
+                alert("Pilih file dulu!");
+                return;
+            }
+
+            const fileName = file.name;
+            const storageRef = storage.ref('uploads/' + fileName);
+            const uploadTask = storageRef.put(file);
+
+            document.getElementById("status").innerText = "Mengupload...";
+
+            uploadTask.on("state_changed", 
+                snapshot => {
+                    let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    document.getElementById("status").innerText = "Upload " + progress.toFixed(0) + "%";
+                }, 
+                error => {
+                    alert("Upload gagal: " + error.message);
+                }, 
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+                        document.getElementById("status").innerText = "Upload Selesai!";
+                        document.getElementById("fileLink").innerHTML = `<a href="${downloadURL}" target="_blank">${downloadURL}</a>`;
+                    });
+                }
+            );
+        }
+    </script>
+
 </body>
 </html>
