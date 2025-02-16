@@ -29,7 +29,7 @@ app.use("/f", express.static(uploadDir));
 app.post("/upload", upload.single("file"), (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded!" });
 
-  const fileUrl = `http://localhost:${PORT}/f/${req.file.filename}`;
+  const fileUrl = `https://cdn2-kenz.vercel.app/f/${req.file.filename}`;
   res.json({ url: fileUrl });
 });
 
